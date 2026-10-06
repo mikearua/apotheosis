@@ -22,6 +22,8 @@ class UserOut(BaseModel): # our response model for the user
     id: int
     email: EmailStr
     created_at: datetime
+    phone_number: str
+    
 
 class UserPost(BaseModel): # our response model for the user
     #id: int
@@ -62,6 +64,7 @@ class Out(BaseModel):
 class userCreate(BaseModel):
     email: EmailStr
     password: str
+    phone_number: str
     
  
     

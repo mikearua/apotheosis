@@ -39,7 +39,7 @@ def get_post(id: int, db: Session = Depends(get_db), user_id: int = Depends(oaut
     return post
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Out)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Response)
 def post(var: schemas.createPost, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     print(user_id.email)
     
@@ -51,7 +51,7 @@ def post(var: schemas.createPost, db: Session = Depends(get_db), user_id = Depen
     
     return new_post #returns the post to our API server
 
-@router.put("/{id}", response_model=schemas.Out, )
+@router.put("/{id}", response_model=schemas.Response, )
 def putt(id: int, var: schemas.update, db: Session = Depends(get_db), user_id:int = Depends(oauth2.get_current_user)):
     post_query = db.query(models.PostMethod).filter(models.PostMethod.id== id)
     
