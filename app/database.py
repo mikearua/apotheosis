@@ -24,7 +24,7 @@ def get_db():                    #this is the dependency
         db.close()
         
         
-SECOND_DATABASE = 'postgresql://{settings.database_username}:{settings.database_password}@'
+SECOND_DATABASE = f'postgresql://{settings.database_username}:{settings.database_password}@'
 f'{settings.database_hostname}:{settings.database_port}/{settings.second_database_name}'
 
 second_engine = create_engine(SECOND_DATABASE)
