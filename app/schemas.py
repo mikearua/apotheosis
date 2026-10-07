@@ -54,7 +54,7 @@ class Response(Post):
      #    orm_mode = True
 
 class Out(BaseModel):
-    PostMethod: Response
+    Posts: Response
     votes: int
     model_config = ConfigDict(from_attributes=True)
     

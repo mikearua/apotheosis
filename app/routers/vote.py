@@ -17,7 +17,7 @@ def vote(vote:schemas.Vote, db: Session = Depends(get_db), current_user: int = D
     vote_query = db.query(models.Votes).filter(models.Votes.post_id==vote.post_id, models.Votes.user_id==current_user.id)
     found_vote = vote_query.first()  
     
-    post = db.query(models.PostMethod).filter(models.PostMethod.id==vote.post_id).first()
+    post = db.query(models.Posts).filter(models.Posts.id==vote.post_id).first()
     if post == None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND,
                             detail=f"post with id {vote.post_id} does not exist")

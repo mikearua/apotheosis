@@ -11,10 +11,10 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
+    second_database_name: str
     class Config:
         env_file = ".env" #IMPORTING THE ENV VAR
     
 settings = Settings()  #AN INSTANCE OF THE CLASS SETTINGS
-print(settings.database_password)
 
 #

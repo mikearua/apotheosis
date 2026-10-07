@@ -4,7 +4,7 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP
 from .database import Base
 from sqlalchemy.orm import relationship
 
-class PostMethod(Base):
+class Posts(Base):
     __tablename__ = "posts"
     
     id = Column(Integer, primary_key=True, nullable=False)

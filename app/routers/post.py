@@ -15,11 +15,11 @@ router = APIRouter(
 @router.get("/", response_model=list[schemas.Out])
 def get_posts(db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user),
               Limit:int = 30, skip:int = 0, search: Optional[str]= ""):
-    #post = db.query(models.PostMethod).filter(models.PostMethod.title.contains(search)).limit(Limit).offset(skip).all()
+    #post = db.query(models.PostMethod).filter(models.Posts.title.contains(search)).limit(Limit).offset(skip).all()
     
-    posts = db.query(models.PostMethod, func.count(models.Votes.post_id).label("votes")).join(
-        models.Votes, models.Votes.post_id==models.PostMethod.id, isouter=True).group_by(models.PostMethod.id).filter(
-            models.PostMethod.title.contains(search)).limit(Limit).offset(skip).all()
+    posts = db.query(models.Posts, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id==models.Posts.id, isouter=True).group_by(models.Posts.id).filter(
+            models.Posts.title.contains(search)).limit(Limit).offset(skip).all()
         
     print(posts)
     print(Limit) 
@@ -28,9 +28,9 @@ def get_posts(db: Session = Depends(get_db), user_id = Depends(oauth2.get_curren
 
 @router.get("/{id}", response_model=schemas.Out)
 def get_post(id: int, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
-    post = db.query(models.PostMethod, func.count(models.Votes.post_id).label("votes")).join(
-        models.Votes, models.Votes.post_id==models.PostMethod.id, isouter=True).group_by(models.PostMethod.id).filter(
-            models.PostMethod.id== id).first()
+    post = db.query(models.Posts, func.count(models.Votes.post_id).label("votes")).join(
+        models.Votes, models.Votes.post_id==models.Posts.id, isouter=True).group_by(models.Posts.id).filter(
+            models.Posts.id== id).first()
     if post == None:
             raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail=f"id: {id} is not found")
     
@@ -43,7 +43,7 @@ def get_post(id: int, db: Session = Depends(get_db), user_id: int = Depends(oaut
 def post(var: schemas.createPost, db: Session = Depends(get_db), user_id = Depends(oauth2.get_current_user)):
     print(user_id.email)
     
-    new_post = models.PostMethod(**var.dict(),
+    new_post = models.Posts(**var.dict(),
                                  owner_id=user_id.id)  #we add this line to connect the user_id to specific posts
     db.add(new_post) #to add to our database
     db.commit() # to commit to our database
@@ -53,7 +53,7 @@ def post(var: schemas.createPost, db: Session = Depends(get_db), user_id = Depen
 
 @router.put("/{id}", response_model=schemas.Response, )
 def putt(id: int, var: schemas.update, db: Session = Depends(get_db), user_id:int = Depends(oauth2.get_current_user)):
-    post_query = db.query(models.PostMethod).filter(models.PostMethod.id== id)
+    post_query = db.query(models.Posts).filter(models.Posts.id== id)
     
     post = post_query.first()
     
@@ -71,7 +71,7 @@ def putt(id: int, var: schemas.update, db: Session = Depends(get_db), user_id:in
         
 @router.delete("/{id}")
 def dele(id: int, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
-    post_query = db.query(models.PostMethod).filter(models.PostMethod.id== id)
+    post_query = db.query(models.Posts).filter(models.Posts.id== id)
     #we are defining the post query
     
     post = post_query.first() # gettin the first post that the query returns
